@@ -1,0 +1,129 @@
+flight("bursa","istanbul",3).
+flight("istanbul","bursa",3).
+flight("istanbul","ankara",4).
+flight("ankara","istanbul",4).
+flight("ankara","konya",2).
+flight("konya","ankara",2).
+
+route(X,Y,C,[]) :- flight(X,Y,C).
+
+route(X,Y,C,[LIST]) :- route(X,Z,K,LIST),flight(Z,Y,L),not(member(Z,LIST)),LIST is [Z|LIST],C is K+L.
+
+append([],X,X).                           
+append([X|Y],Z,[X|W]) :- append(Y,Z,W).
+
+
+member(X, [X|_]).       
+member(X, [_|Tail]) :- member(X, Tail).
+
+
+
+
+——
+flight("bursa","istanbul",3).
+flight("istanbul","bursa",3).
+flight("istanbul","ankara",4).
+flight("ankara","istanbul",4).
+flight("ankara","konya",2).
+flight("konya","ankara",2).
+
+route(X,Y,C) :- flight(X,Y,C).
+route(X,Y,C) :- route2(X,Y,C,[]).
+route2(X,Y,C,LIST) :- not(member(X,LIST)),route(Z,Y,K),flight(X,Z,L),not(X=Y),C is K+L.
+
+member(X, [X|_]).       
+member(X, [_|Tail]) :- member(X, Tail)
+
+
+
+
+——
+flight("bursa","istanbul",3).
+flight("istanbul","bursa",3).
+flight("istanbul","ankara",4).
+flight("ankara","istanbul",4).
+flight("ankara","konya",2).
+flight("konya","ankara",2).
+
+route(X,Y,C) :- flight(X,Y,C).
+route(X,Y,C) :- route2(X,Y,C,[]).
+route2(X,Y,C,LIST) :- not(member(X,LIST)),route(Y,Z,K),flight(X,Z,L),not(X=Y),not(X=Z),C is K+L.
+
+member(X, [X|_]).       
+member(X, [_|Tail]) :- member(X, Tail).
+
+--
+flight("bursa","istanbul",3).
+flight("istanbul","bursa",3).
+flight("istanbul","ankara",4).
+flight("ankara","istanbul",4).
+flight("ankara","konya",2).
+flight("konya","ankara",2).
+
+route(X,Y,C) :- flight(X,Y,C).
+
+route(X,Y,C) :- route(Y,Z,K),flight(Z,X,L),not(X=Y),C is K+L.
+
+
+member(X, [X|_]).       
+member(X, [_|Tail]) :- member(X, Tail).
+----
+flight("bursa","istanbul",3).
+flight("istanbul","bursa",3).
+flight("istanbul","ankara",4).
+flight("ankara","istanbul",4).
+flight("ankara","konya",2).
+flight("konya","ankara",2).
+
+route(X,Y,C) :- fly(X,Y,C,[]).
+
+fly(X,Y,C,V) :- flight(X,Y,C),not(X=Y).
+fly(X,Y,C,V) :- not(member(X,V)),
+    			flight(X,T,C1),
+    			not(T=X),
+    			fly(T,Y,C2,[X|V]),
+    			C is C1 + C2.
+   
+——
+flight("bursa","istanbul",3).
+flight("istanbul","bursa",3).
+flight("istanbul","ankara",4).
+flight("ankara","istanbul",4).
+flight("ankara","konya",2).
+flight("konya","ankara",2).
+flight("sakarya","konya",2).
+flight("konya","sakarya",2).
+route(X,Y,C) :- fly(X,Y,C,[]).
+
+fly(X,Y,C,V) :- flight(X,Y,C),not(X=Y).
+fly(X,Y,C,V) :- not(member(X,V)),
+    			flight(X,T,C1),
+    			not(T=X),
+    			fly(T,Y,C2,[X|V]),not(X=Y),
+    			C is C1 + C2.
+   
+
+——
+flight("bursa","istanbul",3).
+flight("istanbul","bursa",3).
+flight("istanbul","ankara",4).
+flight("ankara","istanbul",4).
+flight("ankara","konya",2).
+flight("konya","ankara",2).
+flight("sakarya","konya",2).
+flight("konya","sakarya",2).
+route(X,Y,C) :- route(X,Y,C,[]).
+
+route(X,Y,C,V) :- flight(X,Y,C),not(X=Y).
+route(X,Y,C,V) :- not(member(X,V)),
+    			flight(X,T,C1),
+    			not(T=X),
+    			route(T,Y,C2,[X|V]),not(X=Y),
+    			C is C1 + C2.
+
+mincost(X,Y,C) :- mincost(X,Y,C,[]).
+
+mincost(X,Y,C,LIST):- route(X,Y,C),min.
+
+
+

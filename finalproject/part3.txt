@@ -1,0 +1,50 @@
+when("A",10).
+when("B",12).
+when("C",11).
+when("D",16).
+when("E",17).
+
+when("F",12).
+when("H",10).
+
+
+
+where("A",101).
+where("B",104).
+where("C",102).
+where("D",103).
+where("E",103).
+
+where("F",104).
+where("H",102).
+
+
+enrolled("A",1).
+enrolled("B",1).
+enrolled("A",2).
+enrolled("B",3).
+enrolled("C",4).
+enrolled("D",5).
+enrolled("D",6).
+enrolled("A",6).
+
+
+enrolled("F",7).
+enrolled("H",7).
+enrolled("F",8).
+enrolled("H",8).
+enrolled("F",9).
+enrolled("H",9).
+enrolled("F",10).
+enrolled("H",10).
+
+
+schedule(S,P,T) :- enrolled(S,K),where(S,P),when(S,T),write("Attendee" = K).
+
+usage(P,T) :- where(S,P),when(S,T).
+
+conflict(X,Y) :- when(X,K),when(Y,Z),K=Z ; where(X,K),where(Y,Z),K=Z.
+
+meet(X,Y):-  when(X,K),when(Y,K),where(X,P),where(Y,P),not(X=Y).
+
+

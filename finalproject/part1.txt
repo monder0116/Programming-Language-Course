@@ -1,0 +1,29 @@
+flight(istanbul,izmir,3).
+flight(izmir,istanbul,3).
+flight(izmir,trabzon,4).
+flight(trabzon,izmir,4).
+flight(trabzon,bursa,4).
+flight(bursa,trabzon,4).
+route(X,Y,C) :- flight(X,Y,C) .
+route(X,Y,L) :-route(Y,K,C2),flight(K,X,C1),not(X=Y),L is C1+C2 .
+
+flight("bursa","istanbul",3).
+flight("istanbul","bursa",3).
+flight("istanbul","ankara",4).
+flight("ankara","istanbul",4).
+flight("konya","ankara",4).
+flight("ankara","konya",4).
+flight("sakarya","ankara",4).
+flight("ankara","sakarya",4).
+
+
+route(From, To) :-routeRecur(From, To, []).
+
+
+routeRecur(From, To, IsVisited) :- flight(From, Another, _),
+    isNotMember(Another, IsVisited),
+    (routeBaseCase(To, Another);
+    routeRecur(Another, To, [From|IsVisited])).
+routeBaseCase(To, Another) :- To = Another.
+
+isNotMember(Member, List) :- not(member(Member, List)).
